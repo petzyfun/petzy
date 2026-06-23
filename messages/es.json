@@ -1,0 +1,14 @@
+{
+  "home": {
+    "title": "Petzy - Plataforma de Servicios para Mascotas",
+    "subtitle": "Encuentra los mejores servicios para tu mascota",
+    "cta": "Comenzar"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "directory": "Directorio",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "dashboard": "Panel"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "home": {
+    "title": "Petzy - Pet Services Platform",
+    "subtitle": "Find the best services for your pet",
+    "cta": "Get Started"
+  },
+  "navigation": {
+    "home": "Home",
+    "directory": "Directory",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard"
+  }
+}
