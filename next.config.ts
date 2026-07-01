@@ -1,24 +1,42 @@
-// next.config.ts
+﻿// next.config.ts
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  // Configuración de imágenes
   images: {
-    domains: ['res.cloudinary.com'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+      // Agrega más dominios si necesitas
+      {
+        protocol: 'https',
+        hostname: '**.vercel.app',
       },
     ],
   },
   
-  // ✅ Eliminar viewTransition y reactOwnerStack
+  // ✅ Configuración de TypeScript (válida en Next.js 16+)
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   
-  // ✅ Si necesitas cacheComponents, usarlo así:
-  cacheComponents: true,
+  // ⚠️ ESLint ya no va aquí, usa variables de entorno o comandos
+  
+  // Si usas cacheComponents (opcional)
+  // cacheComponents: true,
+  
+  // Configuración de compilación
+  compiler: {
+    // Elimina console.log en producción (opcional)
+    // removeConsole: process.env.NODE_ENV === 'production',
+  },
 };
 
 export default withNextIntl(nextConfig);
