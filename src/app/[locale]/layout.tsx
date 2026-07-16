@@ -1,7 +1,15 @@
-﻿import { NextIntlClientProvider } from 'next-intl';
+﻿import { Poppins } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-poppins',
+  display: 'swap',
+});
 
 export default async function LocaleLayout({
   children,
@@ -11,7 +19,7 @@ export default async function LocaleLayout({
   params: { locale: string };
 }) {
   const { locale } = await params;
-  
+
   // Validate that the incoming `locale` parameter is valid
   if (!routing.locales.includes(locale as any)) {
     notFound();
@@ -21,7 +29,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className={poppins.variable} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           {children}

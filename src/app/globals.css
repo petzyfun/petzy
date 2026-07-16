@@ -3,106 +3,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
-}
-
-/* ✅ En Tailwind v4, NO uses @apply con clases que no existen */
-/* En su lugar, usa estilos CSS directos o define las clases primero */
-
-@layer base {
-  * {
-    /* ✅ Usar border-color con la variable CSS directamente */
-    border-color: hsl(var(--border));
-  }
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
-}
-
-/* ✅ Clases personalizadas */
-@layer components {
-  .btn-primary {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    transition: opacity 0.2s;
-  }
-
-  .btn-primary:hover {
-    opacity: 0.9;
-  }
-
-  .btn-secondary {
-    background-color: hsl(var(--secondary));
-    color: hsl(var(--secondary-foreground));
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    transition: opacity 0.2s;
-  }
-}
-
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -134,6 +38,17 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+
+  /* Tokens extra de Petzy */
+  --color-nav-active: var(--nav-active);
+  --color-nav-brand: var(--nav-brand);
+  --color-navbar: var(--navbar);
+  --color-nav-language: var(--nav-language);
+  --color-bone: var(--bone);
+  --color-bone-foreground: var(--bone-foreground);
+  --color-icon: var(--icon);
+  --color-home-bg: var(--home-bg);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -144,38 +59,60 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: #fbf9f3; /* fondo de la app */
+  --foreground: #292929;
+
+  --card: #ffffff;
+  --card-foreground: #292929;
+  --popover: #ffffff;
+  --popover-foreground: #292929;
+
+  --primary: #FF9200;
+  --primary-foreground: #FFF5E6;
+
+  --secondary: #FFC489;
+  --secondary-foreground: #292929;
+
+  --accent: #FFEBC7;
+  --accent-foreground: #292929;
+
+  --muted: #FFEBC7;
+  --muted-foreground: #5B5B5B;
+
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #FFC489;
+  --input: #FFC489;
+  --ring: #FF9200;
+
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
+
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  --sidebar: #e6e8ff;
+  --sidebar-foreground: #292929;
+  --sidebar-primary: #FF9200;
+  --sidebar-primary-foreground: #FFF5E6;
+  --sidebar-accent: #FFEBC7;
+  --sidebar-accent-foreground: #292929;
+  --sidebar-border: #FFC489;
+  --sidebar-ring: #FF9200;
+
+  /* Navbar */
+  --navbar: #FFFFFF;              /* fondo completo del navbar */
+  --nav-brand: #FE8000;           /* nombre "Petzy" del logo */
+  --nav-active: #FF9200;          /* label activo + línea */
+  --nav-language: #ffe9d7;        /* botón de idioma */
+
+  /* Bone button */
+  --bone: #FE8000;
+  --bone-foreground: #FFFFFF;     /* texto del bone-button ahora blanco */
+
+  --icon: #F76E17;
+  --home-bg: #FBF9F3;
 }
 
 .dark {
@@ -210,9 +147,70 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --navbar: #1a1a1a;
+  --nav-brand: #FE8000;
+  --nav-active: #FF9200;
+  --nav-language: #ffe9d7;
+  --bone: #FE8000;
+  --bone-foreground: #FFFFFF;
+  --icon: #F76E17;
+  --home-bg: #FBF9F3;
 }
 
-/* Animaciones para el BoneButton */
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: var(--ring);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+  html {
+    font-family: var(--font-sans);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+
+  .btn-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+}
+
+@keyframes paw-rise {
+  0% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--paw-x)), -0.75rem) scale(0.3) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--paw-x) + var(--paw-drift)), -3.5rem)
+      scale(var(--paw-scale)) rotate(var(--paw-rotate));
+  }
+}
+
 @keyframes floatOut {
   0% {
     opacity: 0;
@@ -273,7 +271,6 @@
   );
 }
 
-/* Estilo para que las partículas aparezcan al hacer click o focus */
 .bone-btn:focus:not(:active) .particle,
 .bone-btn:active .particle {
   display: block;
@@ -281,4 +278,17 @@
 
 .bone-btn .particle {
   display: none;
+}
+
+@keyframes pet-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-pet-marquee {
+  animation: pet-marquee 40s linear infinite;
 }
