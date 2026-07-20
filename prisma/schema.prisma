@@ -1,0 +1,192 @@
+// prisma/schema.prisma
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["public", "auth"]
+}
+
+// ============ CATÁLOGO SEPOMEX ============
+model Colonia {
+  id        String   @id @default(cuid())
+  nombre    String
+  tipo      String   // Colonia, Barrio, Pueblo, Fraccionamiento, Unidad habitacional, etc.
+  cp        String
+  municipio String
+  estado    String
+  ciudad    String?
+  createdAt DateTime @default(now())
+
+  addresses Address[]
+
+  @@unique([cp, nombre, municipio]) // evita duplicados exactos del catálogo
+  @@index([cp])
+  @@index([estado, municipio])
+  @@schema("public")
+}
+
+// ============ DIRECCIÓN REUTILIZABLE ============
+model Address {
+  id        String   @id @default(cuid())
+  pais      String   @default("México")
+  estado    String
+  municipio String
+  coloniaId String
+  colonia   Colonia  @relation(fields: [coloniaId], references: [id])
+  cp        String
+  calle     String?
+  numExt    String?
+  numInt    String?
+  latitud   Float?
+  longitud  Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant    Tenant?
+  branch    Branch?
+  user      User?
+
+  @@index([coloniaId])
+  @@schema("public")
+}
+
+// ============ CATEGORÍAS DE SERVICIO (tus 25) ============
+enum ServiceCategory {
+  VETERINARIA_CLINICA
+  VETERINARIO_DOMICILIO
+  GROOMING
+  HOTEL_MASCOTAS
+  GUARDERIA_PENSION
+  ADIESTRADOR
+  PASEADOR
+  REFUGIO
+  SANTUARIO
+  ASOCIACION_CIVIL
+  RESCATISTA
+  TIENDA_FISICA
+  ECOMMERCE
+  ALIMENTOS
+  FARMACIA_VETERINARIA
+  SEGUROS_MASCOTAS
+  FUNERARIA_MASCOTAS
+  CENTRO_ADOPCION
+  EVENTO_PETFRIENDLY
+  PARQUE_PETFRIENDLY
+  CAFETERIA_PETFRIENDLY
+  TRANSPORTE_MASCOTAS
+  PET_TAXI
+  FOTOGRAFO_MASCOTAS
+  CRIADERO
+
+  @@schema("public")
+}
+
+enum TenantStatus {
+  PENDIENTE
+  ACTIVO
+  SUSPENDIDO
+  CANCELADO
+
+  @@schema("public")
+}
+
+// ============ TENANT (el negocio, ej. "Veterinaria Feliz") ============
+model Tenant {
+  id          String          @id @default(cuid())
+  nombre      String
+  slug        String          @unique   // petzy.mx/veterinaria-patitas
+  subdominio  String          @unique   // veterinariafeliz.petzy.mx
+  categoria   ServiceCategory
+  status      TenantStatus    @default(PENDIENTE)
+
+  // Branding
+  logoUrl     String?
+  colorPrimario   String?
+  colorSecundario String?
+  descripcion String?
+
+  addressId   String?  @unique
+  address     Address? @relation(fields: [addressId], references: [id])
+
+  ownerId     String   @unique   // FK al User dueño (1 tenant = 1 dueño principal)
+  owner       User     @relation("TenantOwner", fields: [ownerId], references: [id])
+
+  branches    Branch[]
+  employees   User[]   @relation("TenantEmployees")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoria])
+  @@index([status])
+  @@schema("public")
+}
+
+// ============ SUCURSAL ============
+model Branch {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  nombre    String
+
+  addressId String?  @unique
+  address   Address? @relation(fields: [addressId], references: [id])
+
+  telefono  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@schema("public")
+}
+
+// ============ ROLES DE USUARIO ============
+enum UserRole {
+  ADMIN_PLATAFORMA
+  DUENO_TENANT
+  EMPLEADO_TENANT
+  CLIENTE
+
+  @@schema("public")
+}
+
+// ============ USER (vinculado a Supabase Auth por id) ============
+model User {
+  id          String    @id  // mismo id que auth.users de Supabase
+  email       String    @unique
+  nombre      String?
+  telefono    String?
+  role        UserRole  @default(CLIENTE)
+
+  addressId   String?   @unique
+  address     Address?  @relation(fields: [addressId], references: [id])
+
+  tenantOwned Tenant?   @relation("TenantOwner")
+  tenantEmployeeOf   Tenant?   @relation("TenantEmployees", fields: [tenantEmployeeOfId], references: [id])
+  tenantEmployeeOfId String?
+
+  pets        Pet[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([role])
+  @@schema("public")
+}
+
+// ============ MASCOTA ============
+model Pet {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  nombre    String
+  especie   String
+  raza      String?
+  createdAt DateTime @default(now())
+
+  @@index([ownerId])
+  @@schema("public")
+}
